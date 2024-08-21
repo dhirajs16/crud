@@ -1,0 +1,72 @@
+{% extends 'myapp/base.html' %}
+
+{% block title %}
+Home
+{% endblock %}
+{% block content%}
+<main class="px-20 py-14 text-white">
+
+
+    <!-- title and search bar -->
+    <div class="border border-[4px] h-[15vh] border-lime-500 rounded-2xl px-10 flex justify-between items-center">
+        <!-- title -->
+        <h3 class="text-lime-500 text-4xl uppercase font-bold">Todo List</h3>
+        <!-- search bar form -->
+        <form action="." method="get" class="flex gap-5">
+            {% csrf_token %}
+            <input type="search" name="query" value="{{query}}" id="id_search" class="bg-lime-100 px-3 py-2 rounded-xl text-black"
+                placeholder="Search Todo Items">
+            <input type="submit" value="Search" name="search"
+                class="bg-lime-500 px-5 py-2 text-black font-semibold text-xl rounded-xl">
+        </form>
+    </div>
+
+    <div class="grid grid-cols-3">
+
+
+        <!-- create form section -->
+        <div class="col-span-1 p-10">
+            <form action="." method="post" class="flex flex-col gap-3">
+                {% csrf_token %}
+                {% for field in form %}
+                {{field.label}}
+                {{field}}
+                {% endfor %}
+                <!-- add button -->
+                <input type="submit" value="Add" name="create"
+                    class="bg-lime-500 px-5 py-2 text-black font-semibold text-xl rounded-xl">
+            </form>
+        </div>
+
+        <!-- table section  -->
+        <div class="col-span-2 p-10">
+            <table class="w-full border border-2 border-lime-500">
+                <!-- table heading -->
+                <thead class="bg-lime-500">
+                    <tr class="uppercase">
+                        <th class="h-12">Title</th>
+                        <th class="h-12">Description</th>
+                        <th class="h-12">Actions</th>
+                    </tr>
+                </thead>
+                <!-- Table items -->
+                <tbody>
+                    {% for item in items %}
+                    <tr>
+                        <td class="text-center h-12">{{item.title}}</td>
+                        <td class="text-center h-12">{{item.description}}</td>
+                        <!-- edit and delete cells -->
+                        <td class="text-center h-12 flex justify-center items-center gap-3">
+                            <a href="{% url 'myapp:update' item.pk %}"
+                                class="text-yellow-500 border border-[3px] border-yellow-500 px-3 text-black font-semibold rounded-lg h-2/3">Edit</a>
+                            <a href="{% url 'myapp:delete' item.pk %}"
+                                class="text-red-500 border border-[3px] border-red-500 px-3 text-black font-semibold h-2/3 rounded-lg">Delete</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</main>
+{% endblock %}
